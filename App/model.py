@@ -31,24 +31,21 @@ es decir contiene los modelos con los datos en memoria
 
 """
 
-# -----------------------------------------------------
-# API del TAD Catalogo de Libros
-# -----------------------------------------------------
+def newDetailsList():
+    return lt.newList("SINGLE-LINKED")
 
+def newCastingsList():
+    lista = lt.newList("SINGLE-LINKED")
+    return lista
 
+def addMovieDetails(detailsList, detail):
+    lt.addLast(detailsList, detail)
 
-# Funciones para agregar informacion al catalogo
+def addMovieCasting(castingsList, casting):
+    lt.addLast(castingsList, casting)
 
+def detailsSize(lst):
+    return lt.size(lst)
 
-
-# ==============================
-# Funciones de consulta
-# ==============================
-
-
-
-# ==============================
-# Funciones de Comparacion
-# ==============================
-
-
+def castingsSize(lst):
+    return lt.size(lst)
