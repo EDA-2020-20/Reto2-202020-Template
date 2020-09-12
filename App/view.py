@@ -37,7 +37,8 @@ operación seleccionada.
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-
+moviesDetails = "Data/SmallMoviesDetailsCleaned.csv"
+moviesCasting = "Data/MoviesCastingRaw-small.csv"
 
 
 
@@ -52,4 +53,55 @@ operación seleccionada.
 
 # ___________________________________________________
 #  Menu principal
+def printMenu ():
+    print("Bienvenido")
+    print("1. Cargar Datos")
+    print("2. Descubrir productoras de cine")
+    print("3. Conocer a un director")
+    print("4. Conocer a un actor")
+    print("5. Entender un género cinematográfico")
+    print("6. Encontrar películas por país") 
+    print("0. Salir")
 # ___________________________________________________
+
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+
+    if int(inputs[0]) == 1:
+        print("Cargando datos ....")
+        details = controller.loadMoviesDetails(moviesDetails)
+        castings = controller.loadMoviesCasting(moviesCasting)
+        detailsSize = controller.detailsSize(details)
+        castingsSize = controller.castingsSize(castings)
+        print("Se cargaron: "+str(detailsSize)+" datos")
+        print("Se cargaron: "+str(castingsSize)+" datos")
+        print(lt.firstElement(details)["original_title"])
+        print(lt.firstElement(details)["release_date"])
+        print(lt.firstElement(details)["vote_average"])
+        print(lt.firstElement(details)["vote_count"])
+        print(lt.firstElement(details)["original_language"])
+        print(" ")
+        print(lt.lastElement(details)["title"])
+        print(lt.lastElement(details)["release_date"])
+        print(lt.lastElement(details)["vote_average"])
+        print(lt.lastElement(details)["vote_count"])
+        print(lt.lastElement(details)["original_language"])
+
+    elif int(inputs[0]) == 2:
+        print("Opción aún no disponible")
+
+    elif int(inputs[0]) == 3:
+        print("Opción aún no disponible")
+
+    elif int(inputs[0]) == 4:
+        print("Opción aún no disponible")
+
+    elif int(inputs[0]) == 5:
+        print("Opción aún no disponible")
+    
+    elif int(inputs[0]) == 6:
+        print("Opción aún no disponible")
+    else:
+        sys.exit(0)
+sys.exit(0)
