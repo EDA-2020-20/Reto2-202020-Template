@@ -33,14 +33,36 @@ del modelo en una sola respuesta. Esta responsabilidad
 recae sobre el controlador.
 """
 
-# ___________________________________________________
-#  Inicializacion del catalogo
-# ___________________________________________________
+def loadMoviesDetails(file):
+    detailsList = model.newDetailsList()
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    try:
+        with open(file, encoding="utf-8") as csvfile:
+            row = csv.DictReader(csvfile, dialect=dialect)
+            for elemento in row:
+                model.addMovieDetails(detailsList,elemento)
+    except:
+        print("Hubo un error con la carga del archivo")
+    return detailsList
+ 
+
+def loadMoviesCasting(file):
+    castingsList = model.newCastingsList()
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    try:
+        with open(file, encoding="utf-8") as csvfile:
+            row = csv.DictReader(csvfile, dialect=dialect)
+            for elemento in row: 
+                model.addMovieCasting(castingsList,elemento)
+    except:
+        print("Hubo un error con la carga del archivo")
+    return castingsList
+    
+def detailsSize(lst):
+    return model.detailsSize(lst)
 
 
-
-
-# ___________________________________________________
-#  Funciones para la carga de datos y almacenamiento
-#  de datos en los modelos
-# ___________________________________________________
+def castingsSize(lst):
+    return model.castingsSize(lst)
