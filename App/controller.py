@@ -32,37 +32,44 @@ el modelo varias veces o integrar varias de las respuestas
 del modelo en una sola respuesta. Esta responsabilidad
 recae sobre el controlador.
 """
+def initCatalog():
+    catalog = model.newCatalog()
+    return catalog
 
-def loadMoviesDetails(file):
-    detailsList = model.newDetailsList()
+def loadData(catalog, detailsFile, castingsFile):
+    loadMoviesDetails(catalog, detailsFile)
+    loadMoviesCasting(catalog, castingsFile)
+
+def loadMoviesDetails(catalog, file):
     dialect = csv.excel()
     dialect.delimiter=";"
-    try:
-        with open(file, encoding="utf-8") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row:
-                model.addMovieDetails(detailsList,elemento)
-    except:
-        print("Hubo un error con la carga del archivo")
-    return detailsList
- 
-
-def loadMoviesCasting(file):
-    castingsList = model.newCastingsList()
+    with open(file, encoding="utf-8") as csvfile:
+        row = csv.DictReader(csvfile, dialect=dialect)
+        for elemento in row:
+            model.addMovieDetails(catalog, elemento)
+            productionCompanies = elemento["production_companies"]
+            model.addMovieProductionCompany(catalog, productionCompanies, elemento)
+                
+def loadMoviesCasting(catalog, file):
     dialect = csv.excel()
     dialect.delimiter=";"
-    try:
-        with open(file, encoding="utf-8") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row: 
-                model.addMovieCasting(castingsList,elemento)
-    except:
-        print("Hubo un error con la carga del archivo")
-    return castingsList
+    with open(file, encoding="utf-8") as csvfile:
+        row = csv.DictReader(csvfile, dialect=dialect)
+        for elemento in row: 
+            model.addMovieCasting(catalog, elemento)
+
+def getMoviesByProductionCompany(catalog, companyName):
+    moviesByCompany = model.getMoviesByProductionCompany(catalog, companyName)
+    return moviesByCompany
     
 def detailsSize(lst):
     return model.detailsSize(lst)
 
-
 def castingsSize(lst):
     return model.castingsSize(lst)
+
+def companyMoviesSize(catalog, companyName):
+    return model.companyMoviesSize(catalog, companyName)
+
+def averageByProductionCompany(catalog, companyName):
+    return model.averageByProductionCompany(catalog, companyName)

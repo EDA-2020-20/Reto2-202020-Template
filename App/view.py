@@ -37,11 +37,8 @@ operación seleccionada.
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-moviesDetails = "Data/SmallMoviesDetailsCleaned.csv"
-moviesCasting = "Data/MoviesCastingRaw-small.csv"
-
-
-
+moviesDetails = "Data/AllMoviesDetailsCleaned.csv"
+moviesCasting = "Data/AllMoviesCastingRaw.csv"
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
@@ -49,7 +46,16 @@ moviesCasting = "Data/MoviesCastingRaw-small.csv"
 #  el controlador.
 # ___________________________________________________
 
-
+def printMoviesByProductionCompany(catalog, companyName):
+    moviesByProductionCompany = controller.getMoviesByProductionCompany(catalog, companyName)
+    iterator = it.newIterator(moviesByProductionCompany["movies"])
+    while it.hasNext(iterator):
+        movie = it.next(iterator)
+        print(movie["title"])
+    size = controller.companyMoviesSize(catalog, companyName)
+    promedio = controller.averageByProductionCompany(catalog, companyName)
+    print("\nSe encontraron "+ str(size) +" películas")
+    print("El promedio de calificación de las películas producidas por "+companyName+" es: "+str(round(promedio,1)))
 
 # ___________________________________________________
 #  Menu principal
@@ -69,27 +75,17 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
 
     if int(inputs[0]) == 1:
+        catalog = controller.initCatalog()
         print("Cargando datos ....")
-        details = controller.loadMoviesDetails(moviesDetails)
-        castings = controller.loadMoviesCasting(moviesCasting)
-        detailsSize = controller.detailsSize(details)
-        castingsSize = controller.castingsSize(castings)
-        print("Se cargaron: "+str(detailsSize)+" datos")
-        print("Se cargaron: "+str(castingsSize)+" datos")
-        print(lt.firstElement(details)["original_title"])
-        print(lt.firstElement(details)["release_date"])
-        print(lt.firstElement(details)["vote_average"])
-        print(lt.firstElement(details)["vote_count"])
-        print(lt.firstElement(details)["original_language"])
-        print(" ")
-        print(lt.lastElement(details)["title"])
-        print(lt.lastElement(details)["release_date"])
-        print(lt.lastElement(details)["vote_average"])
-        print(lt.lastElement(details)["vote_count"])
-        print(lt.lastElement(details)["original_language"])
+        controller.loadData(catalog, moviesDetails, moviesCasting)
+        detailsSize = controller.detailsSize(catalog["details"])
+        castingsSize = controller.castingsSize(catalog["castings"]) 
+        print("Se cargaron "+str(detailsSize)+" datos")
+        print("Se cargaron "+str(castingsSize)+" datos")
 
     elif int(inputs[0]) == 2:
-        print("Opción aún no disponible")
+        companyName = input("Ingrese el nombre de la compañía de producción: ")
+        printMoviesByProductionCompany(catalog, companyName)
 
     elif int(inputs[0]) == 3:
         print("Opción aún no disponible")
