@@ -37,8 +37,8 @@ operación seleccionada.
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-moviesDetails = "Data/AllMoviesDetailsCleaned.csv"
-moviesCasting = "Data/AllMoviesCastingRaw.csv"
+moviesDetails = "Data/SmallMoviesDetailsCleaned.csv"
+moviesCasting = "Data/MoviesCastingRaw-small.csv"
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
@@ -56,6 +56,49 @@ def printMoviesByProductionCompany(catalog, companyName):
     promedio = controller.averageByProductionCompany(catalog, companyName)
     print("\nSe encontraron "+ str(size) +" películas")
     print("El promedio de calificación de las películas producidas por "+companyName+" es: "+str(round(promedio,1)))
+
+def printMoviesByDirector(catalog, directorName):
+    moviesByDirector = controller.getMoviesByDirector(catalog, directorName)
+    iterator = it.newIterator(moviesByDirector["movies"])
+    while it.hasNext(iterator):
+        movieId = it.next(iterator)
+        movie = controller.linkIdToMovieDetail(catalog, movieId)  
+        print(movie["title"])
+    print("El promedio es de: ", round(controller.averageByDirector(catalog, directorName),1))
+    print("La cantidad de películas es de : ", controller.DirectorSize(catalog, directorName))
+
+def printMoviesByActor(catalog, actorName):
+    moviesByActor = controller.getMoviesByActor(catalog, actorName)
+    iterator = it.newIterator(moviesByActor["movies"])
+    while it.hasNext(iterator):
+        movieId = it.next(iterator)
+        movie = controller.linkIdToMovieDetail(catalog, movieId)
+        print(movie["title"])
+    print("El promedio es de: ", round(controller.averageByActor(catalog, actorName),1))
+    print("La cantidad de películas es de : ", controller.actorSize(catalog, actorName))
+
+def printMoviesByGenre(catalog, genreName):
+    moviesByGenre = controller.getMoviesByGenre(catalog, genreName)
+    iterator = it.newIterator(moviesByGenre["movies"])
+    while it.hasNext(iterator):
+        movie = it.next(iterator)
+        print(movie["title"])
+    size = controller.genreMoviesSize(catalog, genreName)
+    promedio = controller.averageByGenre(catalog, genreName)
+    print("\nSe encontraron "+ str(size) +" películas")
+    print("El promedio de votos de las películas del género "+genreName+" es: "+str(round(promedio,1)))
+
+def printMoviesByCountry(catalog, countryName):
+    moviesByCountry = controller.getMoviesByCountry(catalog, countryName)
+    iterator = it.newIterator(moviesByCountry["movies"])
+    while it.hasNext(iterator):
+        movie = it.next(iterator)
+        casting = controller.linkIdToMovieCasting(catalog, movie["id"])
+        director = casting["director_name"]
+        split = movie["release_date"].split("/")
+        año = split[2]
+        print("Título:", movie["title"]," ", "Año:", año," ","Director:", director)
+    
 
 # ___________________________________________________
 #  Menu principal
@@ -88,16 +131,20 @@ while True:
         printMoviesByProductionCompany(catalog, companyName)
 
     elif int(inputs[0]) == 3:
-        print("Opción aún no disponible")
+        directorName = input("Ingrese el nombre del director a conocer: ")
+        printMoviesByDirector(catalog, directorName)
 
     elif int(inputs[0]) == 4:
-        print("Opción aún no disponible")
+        actorName = input("Ingrese el nombre del actor a conocer: ")
+        printMoviesByActor(catalog, actorName)
 
     elif int(inputs[0]) == 5:
-        print("Opción aún no disponible")
+        genreName = input("Ingrese el nombre del género: ")
+        printMoviesByGenre(catalog, genreName)
     
     elif int(inputs[0]) == 6:
-        print("Opción aún no disponible")
+        countryName = input("Ingrese el nombre del país: ")
+        printMoviesByCountry(catalog, countryName)
     else:
         sys.exit(0)
 sys.exit(0)

@@ -47,9 +47,17 @@ def loadMoviesDetails(catalog, file):
         row = csv.DictReader(csvfile, dialect=dialect)
         for elemento in row:
             model.addMovieDetails(catalog, elemento)
-            productionCompanies = elemento["production_companies"]
-            model.addMovieProductionCompany(catalog, productionCompanies, elemento)
-                
+            name = elemento["id"]
+            model.addMovieIdDetail(catalog, name, elemento)
+            productionCompany = elemento["production_companies"]
+            model.addMovieProductionCompany(catalog, productionCompany, elemento)
+            genres = elemento["genres"]
+            genreLst = genres.split("|")
+            for genero in genreLst:
+                model.addGenre(catalog, genero, elemento)
+            country = elemento["production_countries"]
+            model.addCountry(catalog, country, elemento)
+            
 def loadMoviesCasting(catalog, file):
     dialect = csv.excel()
     dialect.delimiter=";"
@@ -57,19 +65,78 @@ def loadMoviesCasting(catalog, file):
         row = csv.DictReader(csvfile, dialect=dialect)
         for elemento in row: 
             model.addMovieCasting(catalog, elemento)
-
+            name = elemento["id"]
+            model.addMovieIdCasting(catalog, name, elemento)
+            director = elemento["director_name"]
+            movieDirectorId = elemento["id"]
+            model.addDirector(catalog, director, movieDirectorId)
+            actor1 = elemento["actor1_name"]
+            actor2 = elemento["actor2_name"]
+            actor3 = elemento["actor3_name"]
+            actor4 = elemento["actor4_name"]
+            actor5 = elemento["actor5_name"]
+            movieActorId = elemento["id"] 
+            model.addActor(catalog, actor1, movieActorId)
+            model.addActor(catalog, actor2, movieActorId)
+            model.addActor(catalog, actor3, movieActorId)
+            model.addActor(catalog, actor4, movieActorId)
+            model.addActor(catalog, actor5, movieActorId)
+        
 def getMoviesByProductionCompany(catalog, companyName):
     moviesByCompany = model.getMoviesByProductionCompany(catalog, companyName)
     return moviesByCompany
-    
+
+def getMoviesByDirector(catalog, directorName):
+    moviesByDirector = model.getMoviesByDirector(catalog, directorName)
+    return moviesByDirector
+
+def getMoviesByActor(catalog, actorName):
+    moviesByActor = model.getMoviesByActor(catalog, actorName)
+    return moviesByActor
+
+def getMoviesByGenre(catalog, genreName):
+    moviesByGenre = model.getMoviesByGenre(catalog, genreName)
+    return moviesByGenre
+
+def getMoviesByCountry(catalog, countryName):
+    moviesByCountry = model.getMoviesByCountry(catalog, countryName)
+    return moviesByCountry
+
+def linkIdToMovieDetail(catalog, movieId):
+    idToMovie = model.linkIdToMovieDetail(catalog, movieId)
+    return idToMovie
+
+def linkIdToMovieCasting(catalog, movieId):
+    idToMovie = model.linkIdToMovieCasting(catalog, movieId)
+    return idToMovie
+#Size
 def detailsSize(lst):
     return model.detailsSize(lst)
 
 def castingsSize(lst):
     return model.castingsSize(lst)
 
+def DirectorSize(catalog, directorName):
+    return model.DirectorSize(catalog, directorName)
+
+def actorSize(catalog, actorName):
+    return model.actorSize(catalog, actorName)
+
 def companyMoviesSize(catalog, companyName):
     return model.companyMoviesSize(catalog, companyName)
 
+def genreMoviesSize(catalog, genreName):
+    return model.genreMoviesSize(catalog, genreName)
+
+#Average
 def averageByProductionCompany(catalog, companyName):
     return model.averageByProductionCompany(catalog, companyName)
+
+def averageByDirector(catalog, directorName):
+    return model.averageByDirector(catalog, directorName)
+
+def averageByGenre(catalog, genreName):
+    return model.averageByGenre(catalog, genreName)
+
+def averageByActor(catalog, actorName):
+    return model.averageByActor(catalog, actorName)
